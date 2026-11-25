@@ -1,41 +1,51 @@
 # AutopilotDoctor
 
-**Portable, zero-telemetry Windows diagnostic engine for Windows Autopilot, Entra ID, Intune MDM, SSL/TLS inspection, SCEP/PKCS certificates, and 802.1X Wi-Fi.**
+**Portable, zero-telemetry Windows Autopilot, Entra ID, Intune MDM, TLS/SSL Inspection & 802.1X diagnostic engine.**
 
-AutopilotDoctor inspects critical endpoint states in ~15 seconds and outputs a standalone, offline-ready HTML dashboard report—eliminating the need to manually dig through `dsregcmd`, Event Viewer logs, registry hives, and Intune Management Extension (IME) logs.
+Built for SysAdmins and MSPs troubleshooting stubborn OOBE (`Shift+F10`) and Enrollment Status Page (ESP) failures without installing agents or collecting heavy `MDMDiagnostics` CAB logs first.
 
----
-
-## Key Diagnostic Modules
-
-- **Module A — Identity & Hardware Attestation:** Parses `dsregcmd /status`, Primary Refresh Token (PRT) health, `KeySignTest`, recovery state, and TPM 2.0 readiness.
-- **Module B — Intune MDM & Sync Health:** Audits `MS DM Server` enrollment keys, `EnterpriseMgmt` scheduled tasks, last check-in delta, IME service status, and translates 72-hour Event Viewer hex error codes.
-- **Module C — Network & SSL/TLS Inspection:** Tests TCP 443 reachability and latency across 12 required Microsoft endpoints, flags User vs. SYSTEM WinHTTP proxy mismatches, and detects SSL/TLS MITM proxy interception (Zscaler, Fortinet, Palo Alto, Netskope).
-- **Module D — Certificates & 802.1X Wireless:** Verifies `LocalMachine\My` and `CurrentUser\My` certificates for private key presence and expiration, and diagnoses WLAN AutoConfig 802.1X/EAP RADIUS failures.
-- **Module E — Win32 Apps & BitLocker:** Maps Win32 app installation states and exit codes (`1603`, `0x87d1041c`, etc.), checks system drive capacity, NVMe/SSD SMART health, and BitLocker key protectors.
+[![Download Latest Release](https://img.shields.io/badge/Download-v1.3.0%20(Free%20Edition)-2563eb?style=for-the-badge&logo=windows)](https://github.com/autopilotdoctor/AutopilotDoctor/releases/latest)
+[![Live Overview](https://img.shields.io/badge/Website-Documentation-0f172a?style=for-the-badge)](https://autopilotdoctor.github.io/AutopilotDoctor/)
+[![Pro & MSP License](https://img.shields.io/badge/Upgrade-Pro%20%2F%20MSP%20License-16a34a?style=for-the-badge)](https://autopilotdoctor.gumroad.com/l/qtryi)
 
 ---
 
-## Privacy & Security Architecture
+### Interactive HTML Dashboard Preview (Anonymized Mode)
 
-- **100% Local Execution:** No diagnostic data, tenant IDs, or logs are ever transmitted to external servers.
-- **Built-in PII Anonymizer:** One-click SHA-256 masking for Hostname, Tenant ID, UPN, Wi-Fi SSID, and application names so reports can be safely attached to vendor support tickets.
-- **Read-Only Engine:** Strictly non-destructive; never modifies registry values, certificates, or MDM configurations.
+![AutopilotDoctor Anonymized HTML Diagnostic Report](a1.png)
+
+---
+
+## What It Checks in ~10 Seconds
+
+* **Identity & Hardware Readiness:** Entra ID join state, Primary Refresh Token (PRT) health, MDM enrollment URLs, TPM 2.0 attestation readiness, and BitLocker status.
+* **Network & SSL Inspection Validation:** Direct TCP 443 and TLS certificate chain checks against Microsoft Autopilot, Intune, Delivery Optimization, and Graph endpoints (immediately flags Zscaler, Palo Alto, or FortiGate SSL decryption breaks).
+* **Certificates & 802.1X:** SCEP/PKCS client certificate validity, private key permissions, and wired/wireless 802.1X supplicant health.
+* **Intune Management Extension (IME):** Win32 app and PowerShell script failure parsing, exit codes, and deployment bottlenecks.
+* **1-Click Safe Sharing Anonymizer:** Automatically masks Tenant IDs, hostnames, UPNs, Wi-Fi SSIDs, and internal app names before exporting a standalone dark/light HTML report for ticket escalations.
+
+---
+
+## Quick Start (OOBE or Live Desktop)
+
+1. Download **`AutopilotDoctor.exe`** from the [Releases](https://github.com/autopilotdoctor/AutopilotDoctor/releases/latest) page.
+2. Run as **Administrator** (or launch directly from a USB drive inside Windows OOBE via `Shift + F10`).
+3. *(Optional)* Check **Anonymize Sensitive Identifiers** before scanning if you plan to share the report externally.
+4. Click **Run Full Diagnostic Scan** to generate an interactive standalone HTML report.
 
 ---
 
 ## Editions
 
-| Feature | Free Community Edition | Pro SysAdmin ($39) | MSP & Team Pack ($149) |
-| :--- | :---: | :---: | :---: |
-| Full 5-Module Diagnostic Scan | Yes | Yes | Yes |
-| Interactive Dark/Light HTML Report | Yes | Yes | Yes |
-| SSL/TLS MITM & Proxy Mismatch Detection | Yes | Yes | Yes |
-| One-Click PII Anonymizer | Yes | Yes | Yes |
-| Copy-Paste Remediation Commands & CLI Fixes | Locked | **Unlocked** | **Unlocked** |
-| Hex Error Code Root-Cause Explanations | Locked | **Unlocked** | **Unlocked** |
-| Raw JSON Export for Automation | Locked | **Unlocked** | **Unlocked** |
-| 30-Day Offline License Cache (OOBE Ready) | — | **Yes (3 Seats)** | **Yes (15 Seats)** |
+| Feature | Free Edition | Pro / MSP Edition |
+| :--- | :---: | :---: |
+| Full Diagnostic Engine (Modules A–E) | Yes | Yes |
+| Standalone Dark/Light HTML Report | Yes | Yes |
+| 1-Click Tenant, Hostname & UPN Anonymizer | Yes | Yes |
+| Copy-Paste CLI Remediation Commands | — | **Yes** |
+| Hex Error Root-Cause Mapping | — | **Yes** |
+| Raw `.json` Export for Automation/SIEM | — | **Yes** |
+| Offline 30-Day OOBE License Caching | — | **Yes** |
 
-- **Download Free Edition:** [GitHub Releases](../../releases/latest)
-- **Get Pro / MSP License:** [Official Storefront](https://autopilotdoctor.lemonsqueezy.com)
+* **Zero Telemetry:** Runs 100% locally using native PowerShell and .NET sockets. No diagnostic data ever leaves the endpoint.
+* **Perpetual Licensing:** One-time license options for [Pro SysAdmin (3 Seats) & MSP Teams (15 Seats)](https://autopilotdoctor.gumroad.com/l/qtryi).
